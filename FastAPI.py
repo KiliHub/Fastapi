@@ -25,7 +25,7 @@ db: List[User] = [
 
 @app.get("/")
 async def root():
-    return {"Hello": "Kili"}
+    return {"Hello": "Mo"}
 
 
 @app.get("/api/v1/users")
