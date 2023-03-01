@@ -2,6 +2,26 @@ from fastapi import FastAPI, HTTPException
 from .models import User,Gender,Role, UserUpdateRequest
 from typing import Optional, List
 from uuid import UUID, uuid4
+import pandas as pd
+import json
+
+def car_sales_by_manufacturer_date(date_string:str , Manufacturer:str):
+    """
+    general function description
+    """
+
+    #reads the car sales data 
+    car_sales_data = pd.read_csv("data\Car_sales.csv", parse_dates=["Latest_Launch"])
+
+    #generates a filter list 
+    filter_bool = ((car_sales_data["Manufacturer"] == Manufacturer) & (car_sales_data["Latest_Launch"] > date_string))
+    
+    response_data = car_sales_data[filter_bool][["Model" , "Sales_in_thousands" , "Price_in_thousands" , "Latest_Launch"]]
+
+    return response_data
+
+
+
 
 app = FastAPI()
 
@@ -25,7 +45,11 @@ db: List[User] = [
 
 @app.get("/")
 async def root():
-    return {"Hello": "Kili"}
+    return {"Hello":"Kili"}
+
+@app.get("/get-cars-by-Manu")
+async def get_cars(*, sales_date: Optional[str] = None, car : Optional[str]):
+    return car_sales_by_manufacturer_date(sales_date, car)
 
 
 @app.get("/api/v1/users")

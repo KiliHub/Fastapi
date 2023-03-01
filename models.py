@@ -3,6 +3,7 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel
 from enum import Enum
 
+
 class Gender(str, Enum):
     male = "male"
     female = "female"
